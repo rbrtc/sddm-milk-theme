@@ -1,208 +1,187 @@
-import QtQuick 2.5
-import QtQuick.Layouts 1.2
-import QtQuick.Controls 1.4 as Qqc
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Window 2.2
-import QtMultimedia 5.5
-import SddmComponents 2.0
+import QtQuick
+import QtQuick.Controls as Qqc
+import SddmComponents
 
 Rectangle {
-	color: "black"
-	width: Window.width
-	height: Window.height
+    id: main
 
-	Connections {
-		target: sddm
+    readonly property color borderCol: "#5C0120"
+    readonly property color bgCol: "#0D0E13"
+    readonly property color textCol: "#7D1292"
+    readonly property color iconCol: "gray"
+    readonly property color focusedCol: textCol
 
-		onLoginSucceeded: {
-		}
+    color: "black"
+    width: Window.width
+    height: Window.height
 
-		onLoginFailed: {
-			denied.play()
-		}
-	}
+    Connections {
+        target: sddm
 
-	AnimatedImage {
-		width: parent.width
-		height: parent.height
-		fillMode: Image.Tile
-		source: "bgN5.gif"
-	}
+        // function onLoginSucceeded() {
+        // }
+        // function onLoginFailed() {
+        // }
+    }
 
-	ColumnLayout {
-		width: parent.width
-		height: parent.height
-		AnimatedImage{
-			Layout.alignment: Qt.AlignCenter
-			Layout.topMargin: 2
-			width: 192
-			height: 192
-			source: "WiredLogIn.gif"
-		}
-		AnimatedImage{
-			Layout.alignment: Qt.AlignCenter
-			Layout.bottomMargin: 20
-			height: 50
-			source: "whoIsUser.gif"
-		}
-		Qqc.Label {
-			Layout.alignment: Qt.AlignCenter
-			text: "Ｕｓｅｒ ＩD:"
-			color: "#c1b492"
-			font.pixelSize: 16
-		}
-		Qqc.TextField {
-			id: username
-			Layout.alignment: Qt.AlignCenter
-			text: userModel.lastUser
-			style: TextFieldStyle {
-				textColor: "#c1b492"
-				background: Rectangle {
-					color: "#000"
-					implicitWidth: 200
-					border.color: "#d2738a"
-				}
-			}
-			KeyNavigation.backtab: shutdownBtn; KeyNavigation.tab: password
-			Keys.onPressed: {
-				if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-					sddm.login(username.text, password.text, session.index)
-					event.accepted = true
-				}
-			}
-		}
-		Qqc.Label {
-			Layout.alignment: Qt.AlignCenter
-			text: "Ｐａｓｓｗｏｒｄ："
-			color: "#c1b492"
-			font.pixelSize: 16
-		}
-		Qqc.TextField {
-			id: password
-			echoMode: TextInput.Password
-			Layout.alignment: Qt.AlignCenter
-			style: TextFieldStyle {
-				textColor: "#c1b492"
-				background: Rectangle {
-					color: "#000"
-					implicitWidth: 200
-					border.color: "#d2738a"
-				}
-			}
-			KeyNavigation.backtab: username; KeyNavigation.tab: session
-			Keys.onPressed: {
-				if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-					sddm.login(username.text, password.text, session.index)
-					event.accepted = true
-				}
-			}
-		}
-		ColumnLayout {
-			Layout.alignment: Qt.AlignCenter
-			Layout.topMargin: 4
-			Layout.bottomMargin: 50
-			width: 200
-			Rectangle {
-				anchors.fill: parent
-				color: "#d2738a"
-			}
-			Qqc.Label {
-				Layout.alignment: Qt.AlignCenter
-				text: "Ｌｏｇｉｎ"
-				color: "#c1b492"
-				font.pixelSize: 20
-			}
-			MouseArea {
-				anchors.fill: parent
-				onClicked: sddm.login(username.text, password.text, session.index)
-			}
-		}
-	}
-	AnimatedImage {
-		id: shutdownBtn
-		height: 80
-		width: 80
-		y: 10
-		x: Window.width - width - 10
-		source: "VisLain.gif"
-		fillMode: Image.PreserveAspectFit
-		MouseArea {
-			anchors.fill: parent
-			hoverEnabled: true
-			onClicked: sddm.powerOff()
-			onEntered: {
-				var component = Qt.createComponent("ShutdownToolTip.qml");
-				if (component.status == Component.Ready) {
-					var tooltip = component.createObject(shutdownBtn);
-					tooltip.x = -45
-					tooltip.y = 60
-				tooltip.destroy(600);
-				}
-			}
-		}
-	}
-	AnimatedImage {
-		id: rebootBtn
-		anchors.right: shutdownBtn.left
-		anchors.rightMargin: 5
-		y: shutdownBtn.y + 10
-		height: 70
-		width: 60
-		source: "lain_myese.gif"
-		fillMode: Image.PreserveAspectFit
-		MouseArea {
-			anchors.fill: parent
-			hoverEnabled: true
-			onClicked: sddm.reboot()
-			onEntered: {
-				var component = Qt.createComponent("RebootToolTip.qml");
-				if (component.status == Component.Ready) {
-					var tooltip = component.createObject(rebootBtn);
-					tooltip.x = -45
-					tooltip.y = 50
-				tooltip.destroy(600);
-				}
-			}
-		}
-	}
-	ComboBox {
-		id: session
-		height: 30
-		width: 200
-		x: 15
-		y: 20
-		model: sessionModel
-		index: sessionModel.lastIndex
-		color: "#000"
-		borderColor: "#d2738a"
-		focusColor: "#d2738a"
-		hoverColor: "#d2738a"
-		textColor: "#c1b492"
-		arrowIcon: "angle-down.png"
-		KeyNavigation.backtab: password; KeyNavigation.tab: rebootBtn;
-	}
-	Audio {
-		id: bgMusic
-		source: "bg_music.wav"
-		autoPlay: true
-		loops: Audio.Infinite
-	}
-	Audio {
-		id: welcome
-		source: "welcome.wav"
-		autoPlay: true
-	}
-	Audio {
-		id: denied
-		source: "denied.wav"
-	}
+    Image {
+        anchors.fill: parent
+        source: "background.jpg"  // Replace with your background image file
+        fillMode: Image.PreserveAspectCrop
+    }
 
-	Component.onCompleted: {
-		if (username.text == "") {
-			username.focus = true
-		} else {
-			password.focus = true
-		}
-	}
+    Column {
+        spacing: 15
+        anchors.centerIn: parent
+
+        Text {
+            text: "Ｕｓｅｒ ＩD"
+            color: main.textCol
+            font.pixelSize: 48
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Qqc.TextField {
+            id: username
+            font.pixelSize: 36
+            font.family: "Liberation Mono"
+            text: userModel.lastUser
+            width: 400
+            color: main.textCol
+            background: Rectangle {
+                color: "transparent"
+                border.color: main.borderCol
+                border.width: 4
+            }
+            KeyNavigation.tab: password
+            Keys.onPressed: {
+                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                    sddm.login(username.text, password.text, session.index);
+                    event.accepted = true;
+                }
+            }
+        }
+
+        Text {
+            text: "Ｐａｓｓｗｏｒｄ"
+            color: main.textCol
+            font.pixelSize: 48
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Qqc.TextField {
+            id: password
+            font.pixelSize: 28
+            width: 400
+            echoMode: TextInput.Password
+            color: main.textCol
+            background: Rectangle {
+                color: "transparent"
+                border.color: main.borderCol
+                border.width: 4
+            }
+            KeyNavigation.tab: session
+            Keys.onPressed: {
+                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                    sddm.login(username.text, password.text, session.index);
+                    event.accepted = true;
+                }
+            }
+        }
+    }
+
+    ComboBox {
+        id: session
+        width: 625
+        height: username.height
+        font.pixelSize: 42
+        font.family: "Liberation Mono"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.verticalCenter: shutdownBtn.verticalCenter
+        anchors.topMargin: 20
+        anchors.leftMargin: 20
+        model: sessionModel
+        index: sessionModel.lastIndex
+        KeyNavigation.tab: rebootBtn
+        color: "black"
+        textColor: main.textCol
+        borderColor: main.borderCol
+        borderWidth: 4
+        hoverColor: main.borderCol
+        focusColor: main.borderCol
+        menuColor: "black"
+        arrowColor: "black"
+        arrowIcon: Qt.resolvedUrl("angle-down.png")
+    }
+
+    Rectangle {
+        id: shutdownBtn
+        width: 80
+        height: 80
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        anchors.rightMargin: 20
+        color: "black"
+        border.color: main.borderCol
+        border.width: 4
+        Text {
+            id: shutdownText
+            text: ""
+            anchors.centerIn: parent
+            color: main.iconCol
+            font.pointSize: 36
+        }
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                shutdownText.color = main.focusedCol;
+            }
+            onExited: {
+                shutdownText.color = main.iconCol;
+            }
+            onClicked: sddm.powerOff()
+        }
+    }
+
+    Rectangle {
+        id: rebootBtn
+        width: 80
+        height: 80
+        anchors.right: shutdownBtn.left
+        anchors.top: parent.top
+        anchors.rightMargin: 20
+        anchors.topMargin: 20
+        color: "black"
+        border.color: main.borderCol
+        border.width: 4
+        Text {
+            id: rebootText
+            text: ""
+            anchors.centerIn: parent
+            color: main.iconCol
+            font.pointSize: 36
+        }
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: sddm.reboot()
+            onEntered: {
+                rebootText.color = main.focusedCol;
+            }
+            onExited: {
+                rebootText.color = main.iconCol;
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        if (username.text === "") {
+            username.focus = true;
+        } else {
+            password.focus = true;
+        }
+    }
 }
-
