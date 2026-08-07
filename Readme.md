@@ -53,4 +53,7 @@ as the current theme.<br>
 Current=sddm-milk-theme
 ```
 
-View https://wiki.archlinux.org/title/SDDM for more info about SDDM configuration.
+View https://wiki.archlinux.org/title/SDDM for more info about SDDM configuration.<br>
+
+This theme was made with the `QT_SCALE_FACTOR` environment variable set to 1.<br>
+Set that variable in `/etc/environment` if you need to scale it.
